@@ -1,0 +1,84 @@
+CREATE TABLE `candidat` (
+  `idCandidat` int(11) NOT NULL AUTO_INCREMENT,
+  `nameCandidat` varchar(60) NOT NULL,
+  `familyNameCandidat` varchar(60) NOT NULL,
+  `emailCandidat` varchar(100) NOT NULL,
+  `domaineCandidat` varchar(60) NOT NULL,
+  `dateInserted` date DEFAULT NULL,
+  PRIMARY KEY (`idCandidat`)
+)
+
+==============================================================
+
+CREATE TABLE `candidatresponse` (
+  `idcandidatResponse` int(11) NOT NULL AUTO_INCREMENT,
+  `candidatResponseText` varchar(1000) DEFAULT NULL,
+  PRIMARY KEY (`idcandidatResponse`)
+)
+
+==============================================================
+
+CREATE TABLE `assoccandidat` (
+  `responseID` int(11) NOT NULL,
+  `candidateID` int(11) NOT NULL,
+  PRIMARY KEY (`responseID`,`candidateID`),
+  KEY `idCandidat_idx` (`candidateID`),
+  CONSTRAINT `idCandidat` FOREIGN KEY (`candidateID`) REFERENCES `candidat` (`idCandidat`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `idcandidatResponse` FOREIGN KEY (`responseID`) REFERENCES `candidatresponse` (`idcandidatResponse`) ON DELETE CASCADE ON UPDATE NO ACTION
+)
+
+==============================================================
+
+CREATE TABLE `domain` (
+  `idDomain` int(11) NOT NULL AUTO_INCREMENT,
+  `nameDomain` varchar(60) NOT NULL,
+  PRIMARY KEY (`idDomain`)
+)
+
+==============================================================
+
+CREATE TABLE `question` (
+  `idQuestion` int(11) NOT NULL AUTO_INCREMENT,
+  `questionText` varchar(1000) DEFAULT NULL,
+  `questionOptionExist` tinyint(4) unsigned NOT NULL,
+  `domainID` int(11) DEFAULT NULL,
+  `questionImage` varchar(10000) DEFAULT NULL,
+  PRIMARY KEY (`idQuestion`),
+  KEY `idDomain_idx` (`domainID`),
+  CONSTRAINT `idDomain` FOREIGN KEY (`domainID`) REFERENCES `domain` (`idDomain`) ON DELETE CASCADE ON UPDATE NO ACTION
+) 
+
+==============================================================
+
+CREATE TABLE `answer` (
+  `questionID` int(11) NOT NULL,
+  `candidatResponseID` int(11) NOT NULL,
+  PRIMARY KEY (`questionID`,`candidatResponseID`),
+  KEY `idcandidatResponse1` (`candidatResponseID`),
+  CONSTRAINT `idQuestion1` FOREIGN KEY (`questionID`) REFERENCES `question` (`idQuestion`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `idcandidatResponse1` FOREIGN KEY (`candidatResponseID`) REFERENCES `candidatresponse` (`idcandidatResponse`) ON DELETE CASCADE ON UPDATE NO ACTION
+)
+
+==============================================================
+
+CREATE TABLE `options` (
+  `idoptions` int(11) NOT NULL AUTO_INCREMENT,
+  `optionText` varchar(1000) DEFAULT NULL,
+  `questionID` int(11) DEFAULT NULL,
+  `optionImage` varchar(10000) DEFAULT NULL,
+  PRIMARY KEY (`idoptions`),
+  KEY `idQuestion_idx` (`questionID`),
+  CONSTRAINT `idQuestion` FOREIGN KEY (`questionID`) REFERENCES `question` (`idQuestion`) ON DELETE CASCADE ON UPDATE NO ACTION
+)
+
+==============================================================
+
+CREATE TABLE `login` (
+  `idlogin` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `password` varchar(1000) NOT NULL,
+  PRIMARY KEY (`idlogin`)
+)
+
+
+
